@@ -1,0 +1,50 @@
+# bSpace v2.3- Main Configuration File
+# ----------------------------------------
+#     This configuration has a pretty      
+#    huge amount of documentation, but     
+#   if you still have questions, please    
+#        ask on BukkitDev! Thanks.
+# Debugging mode
+debug: false
+# Global settings
+global:
+    # Spacesuit armortype - Does not include helmet
+    # "id" if you want to use the ids below
+    armortype: id
+    chestplate: 133
+    leggings: 134
+    boots: 135
+    # Spacehelmet block id
+    helmet: 86
+    # Other global settings
+    givehelmet: false
+    givesuit: false
+    # If true, any time a player is in one of the below worlds,
+    # they won't drown while wearing the helmet
+    drowning:
+      stopdrowning: false
+      # For example: [spaceworld1,spaceworld2,nonspaceworld]
+      worlds: []
+    # Spout features (most features require Spoutcraft)
+    spout:
+      use: true
+      # False if clouds should be hidden
+      clouds: false
+      # True if gravity should be modified
+      gravity: true
+      # Space texture pack to use (if enabled)
+      texturepack: 'https://github.com/downloads/iffa/bSpace/spacetexture.zip'
+      # True if the space tex. pack should be used
+      usetp: true
+      # The texture to use for Spout black holes
+      blackhole-texture: 'http://i.imgur.com/zVBCZ.png'
+# Economy settings
+economy:
+  # True if economy should be enabled
+  enabled: false
+  # Enter and exit costs (when using bSpace's commands)
+  entercommandcost: 20
+  exitcommandcost: 20
+  # Enter and exit costs
+  entercost: 20
+  exitcost: 20

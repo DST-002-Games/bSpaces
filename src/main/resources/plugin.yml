@@ -1,0 +1,59 @@
+# bSpace - plugin.yml
+# All developers/contributors are here!
+authors: [kitskub, iffa, SwearWord, HACKhalo2, Canis85, BR]
+main: me.iffa.bspace.Space
+name: bSpace
+url: http://github.com/iffa/bSpace
+dev-url: http://dev.bukkit.org/server-mods/bSpace
+jenkins-url: http://ci.chrisgward.com/jobs/bSpace
+# Load on startup for bukkit.yml, and all that support
+load: startup
+version: 'v2.5-dev'
+softdepend: [Spout, Register]
+# Commands
+commands:
+  space:
+    description: Go to space, back to earth etc.
+    usage: |
+          /<command> <enter> [spaceworld] - Go to a space world
+          /<command> <back> - Go back where you were
+          /<command> <list> - Lists all spaceworlds (loaded with config.yml)
+          /<command> <help> - Shows help (usage)
+          /<command> <about> - About bSpace
+# Permission nodes
+permissions:
+  # Permission groups
+      # All command permissions group
+  bSpace.commands.*:
+    description: Access to all bSpace commands.
+    children:
+      bSpace.teleport.*: true
+      # Ignores
+  bSpace.ignore.*:
+    description: Access to all ignore permissions (no suit check, black hole effects etc.).
+    children:
+      bSpace.ignoresuitchecks: true
+      bSpace.ignoreblackholes: true
+      # Teleport
+  bSpace.teleport.*:
+    description: Access to all teleportation commands.
+    children:
+      bSpace.teleport.enter: true
+      bSpace.teleport.exit: true
+      bSpace.teleport.list: true
+  # Single permissions
+  bSpace.teleport.enter:
+    description: Allows teleporting to space.
+    default: op
+  bSpace.teleport.exit:
+    description: Allows teleporting out of space.
+    default: op
+  bSpace.teleport.list:
+    description: Allows requesting list of spaceworlds.
+    default: op
+  bSpace.ignoresuitchecks:
+    description: Ignores all suit and helmet checks for the player.
+    default: false
+  bSpace.ignoreblackholes:
+    description: Ignores all black holes (i.e. they will not suck) for the player.
+    default: false
