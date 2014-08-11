@@ -90,6 +90,37 @@ public class SpacePlayerHandler {
 		}
         player.getInventory().setHelmet(helmet);
     }
+    
+    
+    public static void toggleHelmet(Player player)
+    {
+    	if (player.getEquipment().getHelmet() != null)
+    	{
+	    	if (player.getEquipment().getHelmet().getType() == Material.valueOf(ConfigHandler.getHelmet()))
+	    	{
+	    		return;
+	    	}
+    	}
+    	if (player.getInventory().getItemInHand() != null)
+    	{
+	    	if (player.getInventory().getItemInHand().getType() == Material.valueOf(ConfigHandler.getHelmet()))
+	    	{
+	    		ItemStack helmet = new ItemStack(Material.valueOf(ConfigHandler.getHelmet()));
+	    		player.getEquipment().setHelmet(helmet);
+	    		if (player.getInventory().getItemInHand().getAmount() > 1)
+	    		{
+	    			player.getInventory().getItemInHand().setAmount(player.getInventory().getItemInHand().getAmount()-1);
+	    		} else
+	    		{
+	    			player.getInventory().getItemInHand().setType(Material.AIR);
+	    		}
+	    		player.updateInventory();
+	    		return;
+	    	}
+    	}
+    	player.sendMessage(ChatColor.RED+"No Helmet in Hand");
+    }
+    
     /**
      * Checks if a player has a spacesuit (of the given armortype)
      * 
@@ -195,23 +226,31 @@ public class SpacePlayerHandler {
      * @param player Player
      * @return if needs suffocation
      */
-    public static boolean checkNeedsSuffocation(Player player) {
+    public static boolean checkNeedsSuffocation(Player player) 
+    {
         SuitCheck suit = null;
         String id = ConfigHandler.getID(player.getWorld());
-        if (ConfigHandler.getRequireSuit(id)) {
+        MessageHandler.debugPrint(Level.INFO, "Suffocation World id  '" + id);
+        if (ConfigHandler.getRequireSuit(id)) 
+        {
             suit = SuitCheck.FULL_SUIT;
-        } else if (ConfigHandler.getRequireHelmet(id)) {
+        } else if (ConfigHandler.getRequireHelmet(id)) 
+        {
             suit = SuitCheck.HELMET_ONLY;
-        } else{
+        } else
+        {
             return false;
         }
-        if (suit == SuitCheck.FULL_SUIT) {
+        if (suit == SuitCheck.FULL_SUIT) 
+        {
             if(hasSuit(player)){
                 return false;
             }          
         }
-        else if (suit == SuitCheck.HELMET_ONLY) {
-            if(hasHelmet(player)){
+        else if (suit == SuitCheck.HELMET_ONLY) 
+        {
+            if(hasHelmet(player))
+            {
                 return false;
             }
         } 
@@ -230,7 +269,8 @@ public class SpacePlayerHandler {
         boolean insideArea = false;
         String id = ConfigHandler.getID(loc.getWorld());
         while (i < ConfigHandler.getRoomHeight(id)) {
-            if (block.getTypeId() != 0) {
+            if (block.getType() != Material.AIR) 
+            {
                 insideArea = true;
                 i = 0;
                 break;

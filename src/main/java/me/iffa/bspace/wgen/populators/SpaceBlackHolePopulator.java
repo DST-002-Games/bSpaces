@@ -6,17 +6,17 @@ import java.util.Random;
 
 // bSpace Imports
 import me.iffa.bspace.handlers.ConfigHandler;
-import me.iffa.bspace.handlers.SpoutHandler;
 
 // Bukkit Imports
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
 // Spout Imports
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.block.SpoutBlock;
+//import org.getspout.spoutapi.SpoutManager;
+//import org.getspout.spoutapi.block.SpoutBlock;
 
 /**
  * Populates a world with black holes.
@@ -25,7 +25,7 @@ import org.getspout.spoutapi.block.SpoutBlock;
  * @author iffa
  */
 public class SpaceBlackHolePopulator extends BlockPopulator {
-    public static final int ID_TO_USE = 120; //for easier changing if needed
+    public static final String ID_TO_USE = Material.ENDER_STONE.name(); // EnderStone //for easier changing if needed  #120
     private static boolean useSpout;
 
     public SpaceBlackHolePopulator(boolean spout) {
@@ -53,12 +53,13 @@ public class SpaceBlackHolePopulator extends BlockPopulator {
             int z = random.nextInt(16);
             int y = random.nextInt(world.getMaxHeight());
             if(useSpout){
-                SpoutBlock sb = (SpoutBlock) world.getBlockAt((chunkX * 16 + x), y, (chunkZ * 16 + z));
-                SpoutManager.getMaterialManager().overrideBlock(sb, SpoutHandler.blackHole);
+//                SpoutBlock sb = (SpoutBlock) world.getBlockAt((chunkX * 16 + x), y, (chunkZ * 16 + z));
+//                SpoutManager.getMaterialManager().overrideBlock(sb, SpoutHandler.blackHole);
             }
             else {
                 Block block = world.getBlockAt((chunkX * 16 + x), y, (chunkZ * 16 + z));
-                block.setTypeId(ID_TO_USE);
+                block.setType(Material.valueOf(ID_TO_USE));
+//                block.setTypeId(ID_TO_USE);
             }
         }
     }

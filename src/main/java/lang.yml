@@ -1,0 +1,32 @@
+# bSpace v2.3 - "Language" file (for localization purposes)
+# ----------------------------------------
+#     This configuration has a pretty      
+#    huge amount of documentation, but     
+#   if you still have questions, please    
+#        ask on BukkitDev! Thanks.
+# NOTE: Do not remove any node, just modify it! 
+#       Also do not touch stuff like {version}, \n etc!
+# General strings
+general:
+  enabled: 'Enabled version {version}.'
+  disabled: 'Disabled version {version}.'
+  usagestats: 'The plugin will now start sending usage stats. You can disable this plugins/PluginMetrics/config.yml!'
+  configload: 'Generated {configfile} file.'
+  configupdatestart: 'Starting to update a configuration file.'
+  configupdatefinish: ' One of your configuration files was succesfully updated.'
+  configupdatefailure: 'There was a problem updating a configuration file: {exception}'
+# Command-related strings
+commands:
+  notinspace: 'You are not in space!'
+  alreadyinthere: 'You are already in that space world!'
+  # Do not remove the \n here, if you do, BS won't work!
+  exitnotfound: "Exit destination not found, setting to default world spawn location.\nType '/space back' again to go there."
+  worldnotspace: 'The world is not a space world!'
+  worldnotfound: 'The world was not found!'
+  listofspace: 'List of spaceworlds:'
+  nospaceworlds: 'No space worlds are loaded! :('
+# Other strings
+other:
+  nopermission: "You don't have permission!"
+  notenoughmoney: "You don't have enough money!"
+  idnotfound: "An ID with the name '{idname}' does not exist in the config!"

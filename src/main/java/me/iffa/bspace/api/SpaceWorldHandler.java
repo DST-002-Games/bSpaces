@@ -10,6 +10,8 @@ import java.util.Map;
 // bSpace Imports
 import java.util.logging.Level;
 import me.iffa.bspace.Space;
+import me.iffa.bspace.config.SpaceConfig;
+import me.iffa.bspace.config.SpaceConfig.ConfigFile;
 import me.iffa.bspace.handlers.ConfigHandler;
 import me.iffa.bspace.handlers.MessageHandler;
 import me.iffa.bspace.handlers.WorldHandler;
@@ -112,7 +114,7 @@ public class SpaceWorldHandler {
      */
     public static boolean isInAnySpace(Player player) {
         for (String world : spaceWorldNames) {
-            if (player.getWorld().getName().equals(world)) {
+            if (player.getWorld().getName().equalsIgnoreCase(world)) {
                 return true;
             }
         }
@@ -150,11 +152,54 @@ public class SpaceWorldHandler {
         }
     }
 
-    public static String getID(World world) {
-        if (world != null && world.getGenerator() != null && world.getGenerator() instanceof PlanetsChunkGenerator) {
-            return ((PlanetsChunkGenerator) world.getGenerator()).ID;
+    /**
+     * get the bSpace id for a given world
+     * @param world
+     * @return
+     */
+    public static String getID(World world) 
+    {
+    	String id = "";
+        if (world != null && world.getGenerator() != null && world.getGenerator() instanceof PlanetsChunkGenerator) 
+        {
+             id = ((PlanetsChunkGenerator) world.getGenerator()).ID;
+//             return id;
         }
-        return "planets";
+        if (id == "" )
+        {
+        	id = getID(world.getName());
+        }
+        return id;
+    }
+    
+    /**
+     * get the bSpace id for a worldName
+     * default value is <planets>, this means no bSpace options are available
+     * tip: you can overwrite the hard coded values in the ids list
+     * @param worldName
+     * @return
+     */
+    public static String getID(String worldName) 
+    {
+    	String id = "";
+		Map<String,Object> ids = SpaceConfig.getConfig(ConfigFile.IDS).getConfigurationSection("ids").getValues(false);
+		if (id == "")
+		{
+    		id = "planets"; // this is the default config with no space options
+		}
+    	if (ids.containsKey(id) == false)
+    	{
+        	id = "empty";
+        	for (String ref : ids.keySet())
+        	{
+        		if (ref.equalsIgnoreCase(worldName) == true)
+        		{
+            		id = worldName;
+        		}
+        	}
+    	}
+
+        return id;
     }
 
     private static void addSpaceWorld(String worldName) {

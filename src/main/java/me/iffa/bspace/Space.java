@@ -9,9 +9,11 @@ import java.util.logging.Level;
 
 // bSpace Imports
 import me.iffa.bspace.api.SpaceAddon;
+import me.iffa.bspace.api.SpaceWorldHandler;
 import me.iffa.bspace.api.schematic.SpaceSchematicHandler;
 import me.iffa.bspace.commands.SpaceCommandHandler;
 import me.iffa.bspace.config.SpaceConfig;
+import me.iffa.bspace.config.SpaceConfig.ConfigFile;
 import me.iffa.bspace.config.SpaceConfigUpdater;
 import me.iffa.bspace.economy.Economy;
 import me.iffa.bspace.handlers.AddonHandler;
@@ -25,11 +27,6 @@ import me.iffa.bspace.listeners.SpacePlayerListener;
 import me.iffa.bspace.listeners.SpaceSuffocationListener;
 import me.iffa.bspace.listeners.misc.BlackHolePlayerListener;
 import me.iffa.bspace.listeners.misc.SpaceWorldListener;
-import me.iffa.bspace.listeners.spout.SpaceSpoutAreaListener;
-import me.iffa.bspace.listeners.spout.SpaceSpoutCraftListener;
-import me.iffa.bspace.listeners.spout.SpaceSpoutEntityListener;
-import me.iffa.bspace.listeners.spout.SpaceSpoutKeyListener;
-import me.iffa.bspace.listeners.spout.SpaceSpoutPlayerListener;
 import me.iffa.bspace.wgen.planets.PlanetsChunkGenerator;
 
 // Bukkit Imports
@@ -161,15 +158,6 @@ public class Space extends JavaPlugin {
         MessageHandler.debugPrint(Level.INFO, "Registered events (entity & player).");
 
         // Registering events for Spout.
-        if (pm.getPlugin("Spout") != null && pm.getPlugin("Spout").isEnabled() && ConfigHandler.isUsingSpout()) {
-            pm.registerEvents(new SpaceSpoutPlayerListener(this), this);
-            pm.registerEvents(new SpaceSpoutEntityListener(), this);
-            pm.registerEvents(new SpaceSpoutCraftListener(), this);
-            pm.registerEvents(new SpaceSpoutAreaListener(), this);
-            pm.registerEvents(new SpaceSpoutKeyListener(), this);
-            pm.registerEvents(new BlackHolePlayerListener(), this);
-            MessageHandler.debugPrint(Level.INFO, "Registered events (Spout).");
-        }
     }
 
     /**
@@ -186,17 +174,32 @@ public class Space extends JavaPlugin {
         if (id == null || id.isEmpty() || id.length() == 0) {
             realID = false;
         }
-        if (realID) {
-            MessageHandler.debugPrint(Level.INFO, "Getting generator for '" + worldName + "' using id: '" + id + "'");
-        } else {
-            MessageHandler.debugPrint(Level.INFO, "Getting generator for '" + worldName + "' using default id,planets.");
+        if (realID == false) 
+        {
+//            MessageHandler.debugPrint(Level.INFO, "Getting generator for '" + worldName + "' using id: '" + id + "'");
+//        } else 
+//        {
+//            MessageHandler.debugPrint(Level.INFO, "Getting generator for '" + worldName + "' using default id,planets.");
+            MessageHandler.debugPrint(Level.INFO, "No id set for world: " + worldName + " ");
         }
         WorldHandler.checkWorld(worldName);
-        if (!realID) {
-            return new PlanetsChunkGenerator("planets");
+//        if (!realID) {
+//            return new PlanetsChunkGenerator("planets");
+//        }
+        if (SpaceConfig.getLoaded(ConfigFile.IDS) == true)
+        {
+            MessageHandler.debugPrint(Level.INFO, "List of ids : ");
+			Map<String,Object> ids = SpaceConfig.getConfig(ConfigFile.IDS).getConfigurationSection("ids").getValues(false);
+        	for (String ref : ids.keySet())
+        	{
+                MessageHandler.debugPrint(Level.INFO, "id : " + ref + " ");
+        	}
+        	id = SpaceWorldHandler.getID(worldName);
+        } else
+        {
+        	id = "empty";
         }
-        //TODO check if id is in ids.yml
-        // ^ Still a TODO?
+        MessageHandler.debugPrint(Level.INFO, "Getting generator for '" + worldName + "' using id: " + id + "");
         return new PlanetsChunkGenerator(id);
     }
 

@@ -12,7 +12,6 @@ import me.iffa.bspace.economy.Economy;
 import me.iffa.bspace.handlers.LangHandler;
 import me.iffa.bspace.handlers.MessageHandler;
 import me.iffa.bspace.handlers.PlayerHandler;
-import me.iffa.bspace.handlers.SpoutHandler;
 import me.iffa.bspace.handlers.WorldHandler;
 
 // Bukkit Imports
@@ -23,7 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 // Spout Imports
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * Represents "/space back".
@@ -63,9 +61,9 @@ public class SpaceExitCommand extends SpaceCommand {
                     location = SpaceEnterCommand.exitDest.get(player);
                     MessageHandler.debugPrint(Level.INFO, "Teleported player '" + player.getName() + "' out of space.");
                     player.teleport(location);
-                    if (Bukkit.getPluginManager().getPlugin("Spout") != null) {
-                        SpoutHandler.setOrReset(getPlugin(), (SpoutPlayer)player, location);
-                    }
+//                    if (Bukkit.getPluginManager().getPlugin("Spout") != null) {
+//                        SpoutHandler.setOrReset(getPlugin(), (SpoutPlayer)player, location);
+//                    }
                     return;
                 } else {
                     SpaceEnterCommand.exitDest.put(player, Bukkit.getServer().getWorlds().get(0).getSpawnLocation());

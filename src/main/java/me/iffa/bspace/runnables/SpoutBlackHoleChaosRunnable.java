@@ -2,7 +2,6 @@
 package me.iffa.bspace.runnables;
 
 // bSpace Imports
-import me.iffa.bspace.handlers.SpoutHandler;
 import me.iffa.bspace.listeners.misc.BlackHolePlayerListener;
 
 // Bukkit Imports
@@ -11,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 // Spout Imports
-import org.getspout.spoutapi.block.SpoutBlock;
 
 // Java Imports
 import java.util.Random;
@@ -79,11 +77,11 @@ public class SpoutBlackHoleChaosRunnable implements Runnable {
             entityZ = blockZ - zDistance;
         }
 	index += .01;
-        if (SpoutHandler.isInsideRadius(player, block.getLocation(), 1)) {
-            player.setHealth(0);
-            BlackHolePlayerListener.stopRunnable(player);
-            return;
-        }
+//        if (SpoutHandler.isInsideRadius(player, block.getLocation(), 1)) {
+//            player.setHealth(0);
+//            BlackHolePlayerListener.stopRunnable(player);
+//            return;
+//        }
         Location teleport = new Location(player.getWorld(), entityX, block.getY(), entityZ);
         teleport.setYaw(getLookAtYaw(player.getLocation(), block.getLocation()));
         //teleport.setPitch(getLookAtPitch(player.getLocation(), block.getLocation()));

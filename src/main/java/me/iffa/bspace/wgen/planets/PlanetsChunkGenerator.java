@@ -94,20 +94,23 @@ public class PlanetsChunkGenerator extends ChunkGenerator {
             planets.put(world, new ArrayList<Planetoid>());
         }
         byte[][] retVal = new byte[world.getMaxHeight() / 16][];
-
-        if (GENERATE) {
+        if (GENERATE) 
+        {
             generatePlanetoids(world, x, z);
             // Go through the current system's planetoids and fill in this chunk as
             // needed.
-            for (Planetoid curPl : planets.get(world)) {
+            for (Planetoid curPl : planets.get(world)) 
+            {
                 // Find planet's center point relative to this chunk.
                 int relCenterX = curPl.xPos - x * 16;
                 int relCenterZ = curPl.zPos - z * 16;
 
-                for (int curX = -curPl.radius; curX <= curPl.radius; curX++) {//Iterate across every x block
+                for (int curX = -curPl.radius; curX <= curPl.radius; curX++) 
+                {//Iterate across every x block
                     boolean xShell = false;//Is part of the x shell
                     int chunkX = curX + relCenterX;
-                    if (chunkX >= 0 && chunkX < 16) {
+                    if (chunkX >= 0 && chunkX < 16) 
+                    {
                         int worldX = curX + curPl.xPos;//get the x block number in the world
                         // Figure out radius of this circle
                         int distFromCenter = Math.abs(curX);//Distance from center in the x 
@@ -115,30 +118,41 @@ public class PlanetsChunkGenerator extends ChunkGenerator {
                             xShell = true;
                         }
                         int zHalfLength = (int) Math.ceil(Math.sqrt((curPl.radius * curPl.radius) - (distFromCenter * distFromCenter)));//Half the amount of blocks in the z direction
-                        for (int curZ = -zHalfLength; curZ <= zHalfLength; curZ++) {//Iterate over all z blocks 
+                        for (int curZ = -zHalfLength; curZ <= zHalfLength; curZ++) 
+                        {//Iterate over all z blocks 
                             int chunkZ = curZ + relCenterZ;
-                            if (chunkZ >= 0 && chunkZ < 16) {
+                            if (chunkZ >= 0 && chunkZ < 16) 
+                            {
                                 int worldZ = curZ + curPl.zPos;//get the z block number in the world
                                 boolean zShell = false;//Is part of z shell
                                 int zDistFromCenter = Math.abs(curZ);//Distance from center in the z
-                                if (zHalfLength - zDistFromCenter < curPl.shellThickness) {//Check if part of zShell
+                                if (zHalfLength - zDistFromCenter < curPl.shellThickness) 
+                                {//Check if part of zShell
                                     zShell = true;
                                 }
                                 int yHalfLength = (int) Math.ceil(Math.sqrt((zHalfLength * zHalfLength) - (zDistFromCenter * zDistFromCenter)));
-                                for (int curY = -yHalfLength; curY <= yHalfLength; curY++) {
+                                for (int curY = -yHalfLength; curY <= yHalfLength; curY++) 
+                                {
                                     int worldY = curY + curPl.yPos;
                                     boolean yShell = false;
                                     if (yHalfLength - Math.abs(curY) < curPl.shellThickness) {
                                         yShell = true;
                                     }
-                                    if (xShell || zShell || yShell) {
+                                    if (xShell || zShell || yShell) 
+                                    {
                                         ArrayList<MaterialData> list = new ArrayList<MaterialData>(curPl.shellBlkIds);
                                         MaterialData get = list.get(random.nextInt(list.size()));
                                         setBlock(retVal, chunkX, worldY, chunkZ, (byte) get.getItemTypeId());
-                                        if (get.getData() != 0) { //Has data
+                                        if (get.getData() != 0) 
+                                        { //Has data
                                             SpaceDataPopulator.addCoords(world, x, z, chunkX, worldY, chunkZ, get.getData());
                                         }
-                                    } else {
+                                    } else 
+                                    {
+                                    	if (curPl.coreBlkIds == null)
+                                    	{
+                                    		curPl.coreBlkIds.add(new MaterialData(Material.STONE));
+                                    	}
                                         ArrayList<MaterialData> list = new ArrayList<MaterialData>(curPl.coreBlkIds);
                                         // this confuses me too much. this part is setting core blocks, right? how is it "random"?
                                         MaterialData get = list.get(random.nextInt(list.size()));

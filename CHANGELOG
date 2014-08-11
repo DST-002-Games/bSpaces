@@ -1,3 +1,16 @@
+v2.6
+-----------------------------------------
+- update to Bukkit 1.7.2-R0.3
+- Spout interface disabled/removed
+- Blackhole disabled
+- suffocation fixed
+- configuration changed, helmet now Material.string [GLASS] 
+- world ids handling changed, now based on worldnames
+- world generator issue on planets fixed, workaround: set to stone if null
+- world generator test with multiworld
+- world generator test with worldborder fill
+- new command for set helmet
+
 v2.5
 -----------------------------------------
  (added/modified/removed features)

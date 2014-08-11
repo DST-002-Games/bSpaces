@@ -5,17 +5,22 @@ package me.iffa.bspace.wgen.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.v1_7_R1.Block;
+
 // Bukkit Imports
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.material.Chest;
 
 // Spout Imports
-import org.getspout.spoutapi.block.SpoutBlock;
-import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
-import org.getspout.spoutapi.player.SpoutPlayer;
+//import org.getspout.spoutapi.block.SpoutBlock;
+//import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
+//import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * Represents a black hole block.
@@ -23,15 +28,15 @@ import org.getspout.spoutapi.player.SpoutPlayer;
  * @author Jack
  * @author iffa
  */
-public class BlackHole extends GenericCubeCustomBlock {
+public class BlackHole extends Chest {
     // Variables
-    private static List<SpoutBlock> holesMap = new ArrayList<SpoutBlock>();
+    private static List<Block> holesMap = new ArrayList<Block>();
 
     /**
      * Constructor of BlackHole.
      */
     public BlackHole() {
-        super(Bukkit.getPluginManager().getPlugin("bSpace"), "BlackHole", "http://i.imgur.com/zVBCZ.png", 16);
+//        super(Bukkit.getPluginManager().getPlugin("bSpace"), "BlackHole", "http://i.imgur.com/zVBCZ.png", 16);
     }
 
     /**
@@ -39,50 +44,40 @@ public class BlackHole extends GenericCubeCustomBlock {
      *
      * @return List of black holes
      */
-    public static List<SpoutBlock> getHolesList() {
+    public static List<Block> getHolesList() {
         return holesMap;
     }
 
-    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, int changedId) {
     }
 
-    @Override
     public void onBlockPlace(World world, int x, int y, int z) {
     }
 
-    @Override
     public void onBlockPlace(World world, int x, int y, int z, LivingEntity entity) {
     }
 
-    @Override
     public void onBlockDestroyed(World world, int x, int y, int z) {
     }
 
-    @Override
-    public boolean onBlockInteract(World world, int x, int y, int z, SpoutPlayer player) {
+    public boolean onBlockInteract(World world, int x, int y, int z, Player player) {
         return true;
     }
 
-    @Override
     public void onEntityMoveAt(World world, int x, int y, int z, Entity entity) {
     }
 
-    @Override
-    public void onBlockClicked(World world, int x, int y, int z, SpoutPlayer player) {
+    public void onBlockClicked(World world, int x, int y, int z, Player player) {
     }
 
-    @Override
     public boolean isProvidingPowerTo(World world, int x, int y, int z, BlockFace face) {
         return false;
     }
 
-    @Override
     public boolean isIndirectlyProvidingPowerTo(World world, int x, int y, int z, BlockFace face) {
         return false;
     }
 
-    @Override
     public void onBlockDestroyed(World world, int i, int i1, int i2, LivingEntity le) {
     }
 }

@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 // bSpace Imports
 import me.iffa.bspace.Space;
+import me.iffa.bspace.api.SpacePlayerHandler;
 import me.iffa.bspace.api.event.misc.SpaceCommandEvent;
 import me.iffa.bspace.handlers.MessageHandler;
 
@@ -43,7 +44,8 @@ public class SpaceCommandHandler implements CommandExecutor {
      * 
      * @return True if no usage information should be sent, i.e command was successfull
      */
-    public boolean onCommand(CommandSender sender, Command command, String label, String args[]) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String args[]) 
+    {
         /* Notify listeners start */
         SpaceCommandEvent e = new SpaceCommandEvent("SpaceCommandEvent", sender, args);
         if (e.isCancelled()) {
@@ -56,6 +58,11 @@ public class SpaceCommandHandler implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        if (args.length == 1 && args[0].equalsIgnoreCase("helmet")) {
+            // SpaceEnterCommand, 1 argument
+        	SpacePlayerHandler.toggleHelmet(player);
+            return true;
+        }
         if (args.length == 1 && args[0].equalsIgnoreCase("enter")) {
             // SpaceEnterCommand, 1 argument
             SpaceEnterCommand enterCommand = new SpaceEnterCommand(plugin, sender, args);

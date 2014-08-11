@@ -80,14 +80,22 @@ public class SpacePlayerListener implements Listener {
      * @param event Event data
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-        if (WorldHandler.isInAnySpace(event.getPlayer())) {
-            if(!inArea.containsKey(event.getPlayer())) inArea.put(event.getPlayer(), false);
+    public void onPlayerMove(PlayerMoveEvent event) 
+    {
+//        if (event.isCancelled()) 
+//        {
+//            return;
+//        }
+        if (WorldHandler.isInAnySpace(event.getPlayer())) 
+        {
+            if(inArea.containsKey(event.getPlayer()) == false)
+            {
+            	inArea.put(event.getPlayer(), false);
+            }
             boolean insideArea=PlayerHandler.insideArea(event.getPlayer());
-            if (insideArea == true) {
+//            MessageHandler.debugPrint(Level.INFO, "Player '" + event.getPlayer().getName() + "/CheckInside Area :"+insideArea);
+            if (insideArea == true) 
+            {
                 if (inArea.get(event.getPlayer()) == false) {
                     inArea.put(event.getPlayer(), true);
                     /* Notify listeners start */
@@ -97,7 +105,8 @@ public class SpacePlayerListener implements Listener {
                     MessageHandler.debugPrint(Level.INFO, "Player '" + event.getPlayer().getName() + "' entered an area.");
                 }
             } else {
-                if (inArea.get(event.getPlayer()) == true) {
+                if (inArea.get(event.getPlayer()) == true) 
+                {
                     inArea.put(event.getPlayer(), false);
                     /* Notify listeners start */
                     AreaLeaveEvent e = new AreaLeaveEvent(event.getPlayer());
@@ -106,6 +115,9 @@ public class SpacePlayerListener implements Listener {
                     MessageHandler.debugPrint(Level.INFO, "Player '" + event.getPlayer().getName() + "' left an area.");
                 }
             }
+        } else
+        {
+        	MessageHandler.debugPrint(Level.INFO,"Not in Space");
         }
     }
 

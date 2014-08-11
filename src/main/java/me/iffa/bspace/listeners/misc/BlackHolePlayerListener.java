@@ -9,7 +9,6 @@ import java.util.Map;
 
 // bSpace Imports
 import me.iffa.bspace.handlers.ConfigHandler;
-import me.iffa.bspace.handlers.SpoutHandler;
 import me.iffa.bspace.handlers.WorldHandler;
 import me.iffa.bspace.runnables.SpoutBlackHoleChaosRunnable;
 import me.iffa.bspace.wgen.blocks.BlackHole;
@@ -19,6 +18,7 @@ import me.iffa.bspace.wgen.populators.SpaceBlackHolePopulator;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 // Spout Imports
-import org.getspout.spoutapi.block.SpoutBlock;
+//import org.getspout.spoutapi.block.SpoutBlock;
 
 /**
  * Player listener to trigger black hole sucking.
@@ -52,7 +52,7 @@ public class BlackHolePlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.isCancelled() || !WorldHandler.isInAnySpace(event.getPlayer()) || event.getPlayer().getHealth() == 0 || event.getPlayer().hasPermission("bSpace.ignoreblackholes")) {
+        if (event.isCancelled() || !WorldHandler.isInAnySpace(event.getPlayer()) || event.getPlayer().getHealthScale() == 0.0 || event.getPlayer().hasPermission("bSpace.ignoreblackholes")) {
             return;
         }
         long currentTime = System.currentTimeMillis();
@@ -61,39 +61,41 @@ public class BlackHolePlayerListener implements Listener {
         }
         lastTime = System.currentTimeMillis();
 	if(ConfigHandler.getGenerateBlackHolesSpout(ConfigHandler.getID(event.getTo().getWorld()))){
-	    checkBlocksSpout(event.getTo());
-	    for (SpoutBlock block : BlackHole.getHolesList()) {
-		if (SpoutHandler.isInsideRadius(event.getPlayer(), block.getLocation(), SIZE) && !runnables.containsKey(event.getPlayer())) {
-		    int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("bSpace"), new SpoutBlackHoleChaosRunnable(event.getPlayer(), block), 0, (long) 1); //Period
-		    runnables.put(event.getPlayer(), taskId);
-		    event.getPlayer().sendMessage("Black hole. -bam-, you're dead.");
-		    return;
-		}
-	    }
+//	    checkBlocksSpout(event.getTo());
+//	    for (SpoutBlock block : BlackHole.getHolesList()) {
+//		if (SpoutHandler.isInsideRadius(event.getPlayer(), block.getLocation(), SIZE) && !runnables.containsKey(event.getPlayer())) {
+//		    int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("bSpace"), new SpoutBlackHoleChaosRunnable(event.getPlayer(), block), 0, (long) 1); //Period
+//		    runnables.put(event.getPlayer(), taskId);
+//		    event.getPlayer().sendMessage("Black hole. -bam-, you're dead.");
+//		    return;
+//		}
+//	    }
 	}
 	else if(ConfigHandler.getGenerateBlackHolesNonSpout(ConfigHandler.getID(event.getTo().getWorld()))){
 	    checkBlocksNonSpout(event.getTo());
-	    for (Block block : nonSpoutBlocks) {
-		if (SpoutHandler.isInsideRadius(event.getPlayer(), block.getLocation(), SIZE) && !runnables.containsKey(event.getPlayer())) {
-		    int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("bSpace"), new SpoutBlackHoleChaosRunnable(event.getPlayer(), block), 0, (long) 1); //Period
-		    runnables.put(event.getPlayer(), taskId);
-		    event.getPlayer().sendMessage("Black hole. -bam-, you're dead.");
-		    return;
-		}
+	    for (Block block : nonSpoutBlocks) 
+	    {
+//			if (SpoutHandler.isInsideRadius(event.getPlayer(), block.getLocation(), SIZE) && !runnables.containsKey(event.getPlayer())) 
+//			{
+//			    int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("bSpace"), new SpoutBlackHoleChaosRunnable(event.getPlayer(), block), 0, (long) 1); //Period
+//			    runnables.put(event.getPlayer(), taskId);
+//			    event.getPlayer().sendMessage("Black hole. -bam-, you're dead.");
+//			    return;
+//			}
 	    }
 	}
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerInteract(PlayerInteractEvent event){// Check if breaking non-spout blackhole
-	if (event.isCancelled() || !WorldHandler.isInAnySpace(event.getPlayer()) || event.getPlayer().getHealth() == 0 || !event.getPlayer().hasPermission("bSpace.ignoreblackholes")) {
+	if (event.isCancelled() || !WorldHandler.isInAnySpace(event.getPlayer()) || event.getPlayer().getHealthScale() == 0 || !event.getPlayer().hasPermission("bSpace.ignoreblackholes")) {
             return;
         }
 	String id = WorldHandler.getID(event.getPlayer().getWorld());
 	if(!ConfigHandler.getGenerateBlackHolesNonSpout(id) || ConfigHandler.getGenerateBlackHolesSpout(id)){
 	    return;
 	}
-	if(Action.LEFT_CLICK_BLOCK != event.getAction() || event.getClickedBlock().getTypeId() != SpaceBlackHolePopulator.ID_TO_USE){
+	if(Action.LEFT_CLICK_BLOCK != event.getAction() || event.getClickedBlock().getType() != Material.valueOf(SpaceBlackHolePopulator.ID_TO_USE)){
 	    return;
 	}
 	event.getClickedBlock().setTypeId(0);
@@ -122,16 +124,16 @@ public class BlackHolePlayerListener implements Listener {
                 if (scannedSpout.containsKey(chunk) && scannedSpout.get(chunk) == true) {
                     continue;
                 }
-                for (int x = 0; x < 16; x++) {
-                    for (int y = 0; y < 128; y++) {
-                        for (int z = 0; z < 16; z++) {
-                            SpoutBlock block = (SpoutBlock) chunk.getBlock(x, y, z);
-                            if (block.getBlockType() instanceof BlackHole && !BlackHole.getHolesList().contains(block)) {
-                                BlackHole.getHolesList().add(block);
-                            }
-                        }
-                    }
-                }
+//                for (int x = 0; x < 16; x++) {
+//                    for (int y = 0; y < 128; y++) {
+////                        for (int z = 0; z < 16; z++) {
+////                            SpoutBlock block = (SpoutBlock) chunk.getBlock(x, y, z);
+////                            if (block.getBlockType() instanceof BlackHole && !BlackHole.getHolesList().contains(block)) {
+////                                BlackHole.getHolesList().add(block);
+////                            }
+////                        }
+//                    }
+//                }
                 scannedSpout.put(chunk, true);
             }
         }
@@ -151,7 +153,8 @@ public class BlackHolePlayerListener implements Listener {
                     for (int y = 0; y < 128; y++) {
                         for (int z = 0; z < 16; z++) {
 			    Block block = chunk.getBlock(x, y, z);
-			    if(block.getTypeId() == SpaceBlackHolePopulator.ID_TO_USE){
+			    //event.getClickedBlock().getType() != Material.valueOf(SpaceBlackHolePopulator.ID_TO_USE)
+			    if(block.getType() == Material.valueOf(SpaceBlackHolePopulator.ID_TO_USE)){
 				nonSpoutBlocks.add(block);
 			    }
 
