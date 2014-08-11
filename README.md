@@ -1,4 +1,4 @@
-## [bSpace on BukkitDev](http://dev.bukkit.org/bukkit-plugins/bspaces/)
+#### [bSpace on BukkitDev](http://dev.bukkit.org/bukkit-plugins/bspaces/)
 
 NOTE: Clone of fantastic Space Environment for Minecraft. This is a Bukkit plugin.
 
