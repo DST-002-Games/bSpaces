@@ -10,6 +10,7 @@ v2.6
 - world generator test with multiworld
 - world generator test with worldborder fill
 - new command for set helmet
+- update and autoupdate flags in config
 
 v2.5
 -----------------------------------------

@@ -3,8 +3,11 @@ package me.iffa.bspace.wgen.planets;
 
 // Java Imports
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Material;
 // Bukkit Imports
 import org.bukkit.material.MaterialData;
 
@@ -42,7 +45,8 @@ public class Planetoid implements Serializable {
      * @param y Y-coord
      * @param z Z-coord
      */
-    public Planetoid(Set<MaterialData> coreID, Set<MaterialData> shellID, int shellThick, int radius, int x, int y, int z) {
+    public Planetoid(Set<MaterialData> coreID, Set<MaterialData> shellID, int shellThick, int radius, int x, int y, int z) 
+    {
         this.coreBlkIds = coreID;
         this.shellBlkIds = shellID;
         this.shellThickness = shellThick;
@@ -50,5 +54,20 @@ public class Planetoid implements Serializable {
         this.xPos = x;
         this.yPos = y;
         this.zPos = z;
+        if (coreID == null)
+        {
+            coreBlkIds = new HashSet<MaterialData>(Collections.singleton(new MaterialData(Material.COAL_ORE, (byte) 0)));
+
+        } else
+        {
+            coreBlkIds = coreID;	// krglok
+        }
+        if (shellID == null)
+        {
+            shellBlkIds = new HashSet<MaterialData>(Collections.singleton(new MaterialData(Material.STONE, (byte) 0)));
+        } else
+        {
+        	shellBlkIds = shellID;  // krglok
+        }
     }
 }

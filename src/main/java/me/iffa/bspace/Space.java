@@ -45,8 +45,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author kitskub
  * @author HACKhalo2
  */
-public class Space extends JavaPlugin {
-    // Variables
+public class Space extends JavaPlugin 
+{
+	private final int projectId =  83794;
+	private final String apiKey = "7a99d55450a225335559c13c44607f248a2533e8";
+
+	// Variables
     private static String prefix;
     private static String version;
     private static Map<Player, Location> locCache = null;
@@ -56,10 +60,14 @@ public class Space extends JavaPlugin {
     private Economy economy;
     private final SpaceEntityListener entityListener = new SpaceEntityListener();
     private final SpaceWorldListener worldListener = new SpaceWorldListener();
-    private final SpacePlayerListener playerListener = new SpacePlayerListener();
+    private final SpacePlayerListener playerListener = new SpacePlayerListener(this);
     private final SpaceSuffocationListener suffocationListener = new SpaceSuffocationListener(this);
     private final SpaceEconomyListener economyListener = new SpaceEconomyListener();
+    private boolean isAutoUpdate = false;
+    private boolean isUpdateCheck = false;
+	private Update update; // = new Update(projectId, apiKey);
 
+    
     /**
      * Called when the plugin is disabled.
      */
@@ -77,7 +85,8 @@ public class Space extends JavaPlugin {
      * Called when the plugin is enabled.
      */
     @Override
-    public void onEnable() {
+    public void onEnable() 
+    {
         // Initializing variables.
         initVariables();
         MessageHandler.debugPrint(Level.INFO, "Initialized startup variables.");
@@ -85,8 +94,24 @@ public class Space extends JavaPlugin {
         // Loading configuration files.
         SpaceConfig.loadConfigs();
         MessageHandler.debugPrint(Level.INFO, "Loaded configuration files, now checking if they need to be updated...");
-        // Updating configuration files (if needed).
+        // 	Check for Update is available and Autoupdate
+		isAutoUpdate  = SpaceConfig.getConfig(ConfigFile.CONFIG).getBoolean("autoupdate", false);
+		isUpdateCheck = SpaceConfig.getConfig(ConfigFile.CONFIG).getBoolean("updatecheck", false);
+		// check for Updazte the configuration file
         SpaceConfigUpdater.updateConfigs();
+
+        if (isUpdateCheck)
+        {
+        	update = new Update(projectId, apiKey);
+        	update.query();
+        	if (this.getVersion().equalsIgnoreCase(update.versionGameVersion) == false)
+			{
+        		update.getUpdateInfo(this.getName());
+			}
+        } else
+        {
+        	update = null;
+        }
 
         // Registering events.
         registerEvents();
@@ -103,7 +128,8 @@ public class Space extends JavaPlugin {
         MessageHandler.debugPrint(Level.INFO, "Initialized CommandExecutors.");
 
         // Checking if it should always be night in space worlds.
-        for (World world : WorldHandler.getSpaceWorlds()) {
+        for (World world : WorldHandler.getSpaceWorlds()) 
+        {
             String id = ConfigHandler.getID(world);
             if (ConfigHandler.forceNight(id)) {
                 WorldHandler.startForceNightTask(world);
@@ -120,13 +146,13 @@ public class Space extends JavaPlugin {
 
         // Finishing up enablation.
         MessageHandler.print(Level.INFO, LangHandler.getUsageStatsMessage());
-        try {
-            Metrics metrics = new Metrics();
-            metrics.beginMeasuringPlugin(this);
-        } catch (IOException e) {
-            // Fail silently
-            MessageHandler.debugPrint(Level.WARNING, "Failed to contact Metrics (usage stats)");
-        }
+//        try {
+//            Metrics metrics = new Metrics();
+//            metrics.beginMeasuringPlugin(this);
+//        } catch (IOException e) {
+//            // Fail silently
+//            MessageHandler.debugPrint(Level.WARNING, "Failed to contact Metrics (usage stats)");
+//        }
         MessageHandler.print(Level.INFO, LangHandler.getEnabledMessage());
     }
 
@@ -137,6 +163,7 @@ public class Space extends JavaPlugin {
         pm = getServer().getPluginManager();
         version = getDescription().getVersion();
         prefix = "[" + getDescription().getName() + "]";
+        
         if (pm.getPlugin("Spout") != null && ConfigHandler.isUsingSpout()) {
             locCache = new HashMap<Player, Location>();
         }

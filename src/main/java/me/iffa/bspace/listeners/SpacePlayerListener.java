@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import me.iffa.bspace.Space;
 // bSpace Imports
 import me.iffa.bspace.api.event.area.AreaEnterEvent;
 import me.iffa.bspace.api.event.area.AreaLeaveEvent;
@@ -32,11 +33,19 @@ import org.bukkit.event.player.PlayerTeleportEvent;
  * 
  * @author iffa
  */
-public class SpacePlayerListener implements Listener {
+public class SpacePlayerListener implements Listener 
+{
     // Variables
     private final Map<Player, Boolean> inArea = new HashMap<Player, Boolean>();
     //private final Map<Player, Boolean> fixDupe = new HashMap<Player, Boolean>();
 
+	private Space plugin;
+
+    
+    public SpacePlayerListener(Space plugin )
+    {
+    	this.plugin = plugin;
+    }
 
     /**
      * Called when a player attempts to teleport.
@@ -143,7 +152,17 @@ public class SpacePlayerListener implements Listener {
      * @param event Event data
      */
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) 
+    {
+    	// update message for Ops
+    	if (event.getPlayer().isOp()) 
+		{
+			
+			String msg = "[Realms] Updatecheck : "+plugin.getName()+" Vers.: "+plugin.getVersion();
+//    			UpdateOld.message(event.getPlayer(),msg);
+		}
+    	
+    	// world entry
         if(!WorldHandler.isSpaceWorld(event.getPlayer().getWorld())) {
             return;
         }
@@ -151,6 +170,7 @@ public class SpacePlayerListener implements Listener {
         inArea.put(event.getPlayer(), insideArea);
         SpaceEnterEvent e = new SpaceEnterEvent(event.getPlayer(),null,event.getPlayer().getLocation());
         Bukkit.getServer().getPluginManager().callEvent(e);
+
     }
     /**
      * Called on player respawn

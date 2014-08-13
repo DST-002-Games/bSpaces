@@ -88,9 +88,11 @@ public class PlanetsChunkGenerator extends ChunkGenerator {
      * @return Byte array
      */
     @Override
-    public byte[][] generateBlockSections(World world, java.util.Random random, int x, int z, ChunkGenerator.BiomeGrid biomes){
+    public byte[][] generateBlockSections(World world, java.util.Random random, int x, int z, ChunkGenerator.BiomeGrid biomes)
+    {
         // TODO: Use maxWorldHeight here
-        if (!planets.containsKey(world)) {
+        if (!planets.containsKey(world)) 
+        {
             planets.put(world, new ArrayList<Planetoid>());
         }
         byte[][] retVal = new byte[world.getMaxHeight() / 16][];
@@ -149,11 +151,12 @@ public class PlanetsChunkGenerator extends ChunkGenerator {
                                         }
                                     } else 
                                     {
-                                    	if (curPl.coreBlkIds == null)
-                                    	{
-                                    		curPl.coreBlkIds.add(new MaterialData(Material.STONE));
-                                    	}
-                                        ArrayList<MaterialData> list = new ArrayList<MaterialData>(curPl.coreBlkIds);
+//                                    	if (curPl.coreBlkIds == null)
+//                                    	{
+//                                    		curPl.coreBlkIds.add(new MaterialData(Material.STONE));
+//                                    	}
+                                        ArrayList<MaterialData> list = new ArrayList<MaterialData>();
+                                        list.add(new MaterialData(Material.STONE));
                                         // this confuses me too much. this part is setting core blocks, right? how is it "random"?
                                         MaterialData get = list.get(random.nextInt(list.size()));
                                         setBlock(retVal, chunkX, worldY, chunkZ, (byte) get.getItemTypeId());
